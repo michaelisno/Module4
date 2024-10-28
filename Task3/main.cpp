@@ -3,48 +3,64 @@
 
 using namespace std;
 
+void loadFileToArray(string fileName, char* letterArray);
+void convertToUpperCase(char* letterArray);
+void saveArrayToFile(string fileName, char* letterArray);
+
 int main()
 {
 	char letters[26] = {};
 
-	// Read from file
-	ifstream inFile("alphabet.txt");
-	char letter;
+	loadFileToArray("alphabet.txt", letters);
+	convertToUpperCase(letters);
+	saveArrayToFile("upper.txt", letters);
 
-	if (inFile.is_open())
+	return 0;
+}
+
+void loadFileToArray(string fileName, char* letterArray)
+{
+	ifstream file(fileName);
+
+	if (file.is_open())
 	{
 		int currentIndex = 0;
+		char letter;
 
-		while (inFile >> letter)
+		while (file >> letter)
 		{
-			letters[currentIndex] = letter;
+			letterArray[currentIndex] = letter;
 			currentIndex++;
 		}
 
-		inFile.close();
-	}
-
-	// Convert to upper case
-	for (int i = 0; i < 26; i++)
-	{
-		letters[i] -= 32;
-	}
-
-	// Write to new file
-	ofstream outFile("upper.txt");
-	if (outFile.is_open())
-	{
-		for (int i = 0; i < 26; i++)
-		{
-			outFile << letters[i] << endl;
-		}
-
-		outFile.close();
+		file.close();
 	}
 	else
 	{
-		cout << "Error" << endl;
+		cout << "Error reading file." << endl;
 	}
+}
+void convertToUpperCase(char* letterArray)
+{
+	for (int i = 0; i < 26; i++)
+	{
+		letterArray[i] -= 32;
+	}
+}
+void saveArrayToFile(string fileName, char* letterArray)
+{
+	ofstream file(fileName);
+	if (file.is_open())
+	{
+		for (int i = 0; i < 26; i++)
+		{
+			file << letterArray[i] << endl;
+		}
 
-	return 0;
+		file.close();
+	}
+	else
+	{
+		cout << "Error writing to file." << endl;
+	}
 }
